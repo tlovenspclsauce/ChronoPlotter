@@ -123,8 +123,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)\ChronoPlotter.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
@@ -173,8 +174,9 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindows.dll" "$(OutDir)
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)\ChronoPlotter.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
@@ -625,3 +627,4 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
+
