@@ -289,9 +289,16 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="About.cpp" />
+    <ClCompile Include="AutofillDialog.cpp" />
+    <ClCompile Include="ChronographParsers.cpp" />
     <ClCompile Include="ChronoPlotter.cpp" />
+    <ClCompile Include="EnterVelocitiesDialog.cpp" />
+    <ClCompile Include="FileSelectionHandlers.cpp" />
+    <ClCompile Include="GraphRenderer.cpp" />
     <ClCompile Include="PowderTest.cpp" />
+    <ClCompile Include="RoundRobinDialog.cpp" />
     <ClCompile Include="SeatingDepthTest.cpp" />
+    <ClCompile Include="SeriesDataManager.cpp" />
     <ClCompile Include="TunerTest.cpp" />
     <ClCompile Include="qcustomplot\qcustomplot.cpp" />
     <ClCompile Include="untar.cpp" />
@@ -420,6 +427,9 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_TunerTest.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_TunerTest.cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="ChronographParsers.h" />
+    <ClInclude Include="FileSelectionHandlers.h" />
+    <ClInclude Include="GraphRenderer.h" />
     <ClInclude Include="miniz.h" />
     <CustomBuild Include="qcustomplot\qcustomplot.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">qcustomplot\qcustomplot.h;release\moc_predefs.h;C:\Qt\5.15.2\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
@@ -439,6 +449,7 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_qcustomplot.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_qcustomplot.cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="SeriesDataManager.h" />
     <ClInclude Include="untar.h" />
     <ClInclude Include="QXlsx\header\xlsxabstractooxmlfile.h" />
     <ClInclude Include="QXlsx\header\xlsxabstractooxmlfile_p.h" />

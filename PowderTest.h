@@ -19,13 +19,6 @@
 #include <QMainWindow>
 #include <QTextEdit>
 
-#include "xlsxdocument.h"
-#include "xlsxchartsheet.h"
-#include "xlsxcellrange.h"
-#include "xlsxchart.h"
-#include "xlsxrichstring.h"
-#include "xlsxworkbook.h"
-
 #include "ChronoPlotter.h"
 
 namespace Powder
@@ -85,15 +78,8 @@ namespace Powder
 
 		protected:
 			void optionCheckBoxChanged(QCheckBox *, QLabel *, QComboBox *);
-			ChronoSeries *ExtractLabRadarSeries ( QTextStream & );
-			QList<ChronoSeries *> ExtractMagnetoSpeedSeries ( QTextStream & );
-			QList<ChronoSeries *> ExtractProChronoSeries ( QTextStream & );
-			QList<ChronoSeries *> ExtractProChronoSeries_format2 ( QTextStream & );
-			QList<ChronoSeries *> ExtractGarminSeries_xlsx ( QXlsx::Document & );
-			QList<ChronoSeries *> ExtractGarminSeries_csv ( QTextStream & );
-			QList<ChronoSeries *> ExtractShotMarkerSeriesTar ( QString );
-			void DisplaySeriesData ( void );
-			void renderGraph ( bool );
+			void DisplaySeriesData(void);
+			void renderGraph(bool);
 
 		private:
 			GraphPreview *graphPreview;
