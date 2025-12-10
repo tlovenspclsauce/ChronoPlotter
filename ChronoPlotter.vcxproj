@@ -600,6 +600,7 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
   <ItemGroup>
     <None Include="BUILD.md" />
     <None Include="DejaVuSans.ttf" />
+    <None Include="docs\garmin-file-preparation.md" />
     <None Include="images\logo.png" />
     <CustomBuild Include="resources.qrc">
       <FileType>Document</FileType>
@@ -627,4 +628,3 @@ xcopy /y /d "C:\Qt\5.15.2\msvc2019_64\plugins\platforms\qwindowsd.dll" "$(OutDir
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
-
