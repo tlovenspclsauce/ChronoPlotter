@@ -64,6 +64,7 @@ namespace Powder
 			void selectGarminFile(bool);
 			void selectShotMarkerFile(bool);
 			void manualDataEntry(bool);
+			void prepareGarminFiles(bool);
 			void rrClicked(bool);
 			void addNewClicked(bool);
 			void enterDataClicked(bool);

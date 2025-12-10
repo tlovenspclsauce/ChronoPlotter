@@ -9,6 +9,10 @@
 #include "FileSelectionHandlers.h"
 #include "SeriesDataManager.h"
 
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QMessageBox>
+
 #include "xlsxdocument.h"
 #include "xlsxchartsheet.h"
 #include "xlsxcellrange.h"
@@ -80,6 +84,13 @@ PowderTest::PowderTest ( QWidget *parent )
 	manualEntryButton->setMinimumHeight(50);
 	manualEntryButton->setMaximumHeight(50);
 
+	QPushButton *prepareGarminButton = new QPushButton("Prepare Garmin files");
+	connect(prepareGarminButton, SIGNAL(clicked(bool)), this, SLOT(prepareGarminFiles(bool)));
+	prepareGarminButton->setMinimumWidth(300);
+	prepareGarminButton->setMaximumWidth(300);
+	prepareGarminButton->setMinimumHeight(50);
+	prepareGarminButton->setMaximumHeight(50);
+
 	QVBoxLayout *placeholderLayout = new QVBoxLayout();
 	placeholderLayout->addStretch(0);
 	placeholderLayout->addWidget(selectLabel);
@@ -96,6 +107,8 @@ PowderTest::PowderTest ( QWidget *parent )
 	placeholderLayout->setAlignment(smFileButton, Qt::AlignCenter);
 	placeholderLayout->addWidget(manualEntryButton);
 	placeholderLayout->setAlignment(manualEntryButton, Qt::AlignCenter);
+	placeholderLayout->addWidget(prepareGarminButton);
+	placeholderLayout->setAlignment(prepareGarminButton, Qt::AlignCenter);
 	placeholderLayout->addStretch(0);
 
 	QWidget *placeholderWidget = new QWidget();
@@ -1114,5 +1127,165 @@ void PowderTest::autofillClicked ( bool state )
 	else
 	{
 		qDebug() << "User cancelled dialog";
+	}
+}
+
+void PowderTest::prepareGarminFiles ( bool state )
+{
+	qDebug() << "prepareGarminFiles state =" << state;
+
+	// Open file selection dialog to select 2 or more CSV files
+	QStringList csvFiles = QFileDialog::getOpenFileNames(
+		this,
+		"Select Garmin CSV files (2 or more)",
+		prevGarminDir,
+		"CSV files (*.csv)"
+	);
+
+	if (csvFiles.isEmpty())
+	{
+		qDebug() << "User didn't select any files, bail";
+		return;
+	}
+
+	if (csvFiles.size() < 2)
+	{
+		qDebug() << "User selected less than 2 files";
+		QMessageBox *msg = new QMessageBox();
+		msg->setIcon(QMessageBox::Warning);
+		msg->setText("Please select at least 2 CSV files to combine.");
+		msg->setWindowTitle("Not Enough Files");
+		msg->exec();
+		return;
+	}
+
+	qDebug() << "Selected" << csvFiles.size() << "CSV files";
+
+	// Update the previous directory
+	QFileInfo firstFileInfo(csvFiles.at(0));
+	prevGarminDir = firstFileInfo.absolutePath();
+
+	// Create a new XLSX document
+	QXlsx::Document xlsx;
+
+	// Process each CSV file and add it as a worksheet
+	for (int i = 0; i < csvFiles.size(); i++)
+	{
+		QString csvPath = csvFiles.at(i);
+		qDebug() << "Processing CSV file:" << csvPath;
+
+		QFile csvFile(csvPath);
+		if (!csvFile.open(QIODevice::ReadOnly | QIODevice::Text))
+		{
+			qDebug() << "Failed to open CSV file:" << csvPath;
+			QMessageBox *msg = new QMessageBox();
+			msg->setIcon(QMessageBox::Critical);
+			msg->setText(QString("Failed to open file:\n%1").arg(csvPath));
+			msg->setWindowTitle("Error");
+			msg->exec();
+			return;
+		}
+
+		QTextStream csv(&csvFile);
+
+		// Read the CSV content
+		QList<QStringList> rows;
+		while (!csv.atEnd())
+		{
+			QString line = csv.readLine();
+			QStringList cols = line.split(",");
+
+			// Trim whitespace from cells
+			QMutableStringListIterator it(cols);
+			while (it.hasNext())
+			{
+				it.next();
+				it.setValue(it.value().trimmed());
+			}
+
+			rows.append(cols);
+		}
+
+		csvFile.close();
+
+		if (rows.isEmpty())
+		{
+			qDebug() << "CSV file is empty:" << csvPath;
+			continue;
+		}
+
+		// Create worksheet name
+		QString sheetName = QString("Sheet%1").arg(i + 1);
+		
+		qDebug() << "Creating worksheet:" << sheetName;
+
+		// For the first sheet, rename the default sheet instead of adding a new one
+		if (i == 0)
+		{
+			xlsx.renameSheet("Sheet1", sheetName);
+			xlsx.selectSheet(sheetName);
+		}
+		else
+		{
+			xlsx.addSheet(sheetName);
+			xlsx.selectSheet(sheetName);
+		}
+
+		// Write the CSV data to the worksheet
+		for (int row = 0; row < rows.size(); row++)
+		{
+			QStringList cols = rows.at(row);
+			for (int col = 0; col < cols.size(); col++)
+			{
+				// Write to Excel (1-based indexing)
+				xlsx.write(row + 1, col + 1, cols.at(col));
+			}
+		}
+		
+		qDebug() << "Wrote" << rows.size() << "rows to worksheet" << sheetName;
+	}
+
+	// Present the user with a save dialog
+	QString savePath = QFileDialog::getSaveFileName(
+		this,
+		"Save combined Garmin XLSX file",
+		prevGarminDir,
+		"Excel files (*.xlsx)"
+	);
+
+	if (savePath.isEmpty())
+	{
+		qDebug() << "User cancelled save dialog";
+		return;
+	}
+
+	// Ensure the file has .xlsx extension
+	if (!savePath.endsWith(".xlsx", Qt::CaseInsensitive))
+	{
+		savePath += ".xlsx";
+	}
+
+	qDebug() << "Saving XLSX file to:" << savePath;
+
+	// Save the XLSX file
+	bool saveSuccess = xlsx.saveAs(savePath);
+
+	if (saveSuccess)
+	{
+		qDebug() << "XLSX file saved successfully";
+		QMessageBox *msg = new QMessageBox();
+		msg->setIcon(QMessageBox::Information);
+		msg->setText(QString("Successfully created multi-series Garmin file!\n\nSaved to:\n%1").arg(savePath));
+		msg->setWindowTitle("Success");
+		msg->exec();
+	}
+	else
+	{
+		qDebug() << "Failed to save XLSX file";
+		QMessageBox *msg = new QMessageBox();
+		msg->setIcon(QMessageBox::Critical);
+		msg->setText(QString("Failed to save file:\n%1").arg(savePath));
+		msg->setWindowTitle("Error");
+		msg->exec();
 	}
 }
