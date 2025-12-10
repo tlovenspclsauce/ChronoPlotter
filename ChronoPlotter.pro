@@ -6,6 +6,13 @@ TEMPLATE = app
 TARGET = ChronoPlotter
 INCLUDEPATH += .
 
+# Force x64 build
+contains(QMAKE_TARGET.arch, x86_64) {
+    CONFIG += x86_64
+} else {
+    CONFIG += x86_64
+}
+
 QXLSX_PARENTPATH=./QXlsx/
 QXLSX_HEADERPATH=./QXlsx/header/
 QXLSX_SOURCEPATH=./QXlsx/source/
@@ -21,3 +28,18 @@ CONFIG += console
 RESOURCES += resources.qrc
 
 RC_ICONS = images/icons/icon.ico
+
+# Force x64 linker flags for MSVC
+win32-msvc* {
+    QMAKE_LFLAGS += /MACHINE:X64
+}
+
+# Post-build: Deploy Qt DLLs automatically
+win32 {
+    CONFIG(release, debug|release) {
+        QMAKE_POST_LINK = $$quote($$[QT_INSTALL_BINS]/windeployqt.exe $$shell_quote($$shell_path($$OUT_PWD/release/$${TARGET}.exe)) --release --no-translations)
+    }
+    CONFIG(debug, debug|release) {
+        QMAKE_POST_LINK = $$quote($$[QT_INSTALL_BINS]/windeployqt.exe $$shell_quote($$shell_path($$OUT_PWD/debug/$${TARGET}.exe)) --debug --no-translations)
+    }
+}
