@@ -8,6 +8,40 @@ ChronoPlotter supports two Garmin file formats:
 - **XLSX (Excel)** - Recommended for multiple series
 - **CSV (Comma-Separated Values)** - Single series only
 
+## Quick Start: Using the Built-In File Preparation Tool
+
+**New in v2.2.2!** ChronoPlotter now includes a built-in tool to automatically combine multiple Garmin CSV files into a single multi-series XLSX file.
+
+### How to Use "Prepare Garmin files"
+
+1. On the main ChronoPlotter screen, click the **"Prepare Garmin files"** button
+2. In the file selection dialog, select **2 or more CSV files** exported from your Garmin Xero C1
+   - Hold `Ctrl` (Windows) or `Cmd` (Mac) to select multiple files
+   - Files will be processed in the order they are selected
+3. Click **Open** to begin processing
+4. Choose where to save the combined XLSX file
+5. The tool will automatically:
+   - Read each CSV file
+   - Create a separate worksheet for each file
+   - Combine them into a single XLSX workbook
+   - Name the worksheets as Sheet1, Sheet2, Sheet3, etc.
+
+### Benefits of Using This Tool
+
+- **No manual editing required** - Automatically combines CSV files
+- **Preserves all data** - Each CSV becomes a worksheet with all original data intact
+- **Ready to import** - The resulting XLSX file can be immediately loaded using "Select Garmin CSV/XLSX file"
+- **Error handling** - Validates files and provides clear error messages if something goes wrong
+
+### Workflow Example
+
+1. Export individual CSV files from your Garmin Xero C1 (one per shooting string)
+2. Click **"Prepare Garmin files"** in ChronoPlotter
+3. Select all exported CSV files
+4. Save the combined XLSX file
+5. Click **"Select Garmin CSV/XLSX file"** to load the combined data
+6. All series will be imported at once, ready for analysis
+
 ## XLSX File Format (Multi-Series Support)
 
 XLSX files can contain multiple shooting series, with each series stored on a separate worksheet within the same workbook.
@@ -73,7 +107,7 @@ CSV files contain a single shooting series.
 
 #### Row 2: Velocity Unit
 - **Cell 1**: Header label (ignored)
-- **Cell 2**: Must contain `"FPS"` or `"MPS"`/`"M/S"`
+- **Cell 2**: Must contain `"FPS"` or `"MPS"`/`"M/S"` 
 
 #### Row 3+: Shot Data
 - **Column 1**: Shot number (1, 2, 3, etc.)
@@ -121,7 +155,7 @@ ChronoPlotter ignores:
 ### Common Issues
 
 **Issue**: Series not detected  
-**Solution**: Verify Row 2, Column 2 contains `"FPS"` or `"MPS"`/`"M/S"`
+**Solution**: Verify Row 2, Column 2 contains `"FPS"` or `"MPS"`/`"M/S"` 
 
 **Issue**: Velocities not importing  
 **Solution**: Ensure Column A contains sequential integers (1, 2, 3...) and Column B contains only numbers
@@ -132,6 +166,15 @@ ChronoPlotter ignores:
 ## Exporting from Garmin Xero C1
 
 ### For XLSX (Recommended):
+
+#### Method 1: Use ChronoPlotter's Built-In Tool (Easiest)
+1. Export individual CSV files from your Garmin Xero C1
+2. In ChronoPlotter, click **"Prepare Garmin files"**
+3. Select all CSV files you want to combine
+4. Save the combined XLSX file
+5. Import using **"Select Garmin CSV/XLSX file"**
+
+#### Method 2: Direct XLSX Export
 1. Connect your Garmin Xero C1 to your computer
 2. Use the Garmin Connect app or device export feature
 3. Select **XLSX format** for export
@@ -141,7 +184,7 @@ ChronoPlotter ignores:
 ### For CSV:
 1. Export individual strings as CSV from your Garmin device
 2. Each CSV will contain one series
-3. Import CSV files one at a time, or combine them manually into an XLSX workbook
+3. Import CSV files one at a time, or use the **"Prepare Garmin files"** tool to combine them into an XLSX workbook
 
 ## Tips for Best Results
 
@@ -157,6 +200,8 @@ ChronoPlotter ignores:
 
 5. **Include dates** - The DATE row helps track when series were recorded for reference
 
+6. **Use the preparation tool for multiple CSV files** - Instead of manually combining files, use the built-in "Prepare Garmin files" button to save time
+
 ## Getting Help
 
 If you encounter issues importing Garmin files:
@@ -166,5 +211,5 @@ If you encounter issues importing Garmin files:
 
 ---
 
-**Last Updated**: 2024  
-**Compatible with**: ChronoPlotter v1.x and later
+**Last Updated**: December 10, 2025  
+**Compatible with**: ChronoPlotter v2.2.2 and later
